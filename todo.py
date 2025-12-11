@@ -14,11 +14,11 @@ def save_tasks(tasks):
         for t in tasks:
             f.write(t + "\n")
 
-def add(task):
+def add(task, priority="normal"):
     tasks = load_tasks()
-    tasks.append(task)
+    tasks.append(f"{task} [{priority}]")
     save_tasks(tasks)
-    print("Task added:", task)
+    print(f"Task added: {task} [{priority}]")
 
 def list_tasks():
     tasks = load_tasks()
@@ -43,18 +43,29 @@ def clear():
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python3 todo.py [add/list/done/clear] <task>")
+        print("Usage: python3 todo.py add <task> <priority>")
+        print("Example: python3 todo.py add \"Buy milk\" high")
         exit()
 
     cmd = sys.argv[1]
 
     if cmd == "add":
-        add(" ".join(sys.argv[2:]))
+        # Last argument is priority
+        priority = sys.argv[-1]
+
+        # All arguments except last are task words
+        task = " ".join(sys.argv[2:-1])
+
+        add(task, priority)
+
     elif cmd == "list":
         list_tasks()
+
     elif cmd == "done":
         done(int(sys.argv[2]))
+
     elif cmd == "clear":
         clear()
+
     else:
         print("Unknown command")
