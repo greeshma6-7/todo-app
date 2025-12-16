@@ -17,8 +17,8 @@ pipeline {
         stage('Build Image with Podman') {
             steps {
                 sh '''
-                  echo "Building image using Podman..."
-                  docker build -t $IMAGE_NAME:$IMAGE_TAG .
+                  echo "Building image using PODMAN..."
+                  podman build -t $IMAGE_NAME:$IMAGE_TAG .
                 '''
             }
         }
@@ -26,8 +26,8 @@ pipeline {
         stage('Push Image with Podman') {
             steps {
                 sh '''
-                  echo "Pushing image using Podman..."
-                  docker push $IMAGE_NAME:$IMAGE_TAG
+                  echo "Pushing image using PODMAN..."
+                  podman push $IMAGE_NAME:$IMAGE_TAG
                 '''
             }
         }
@@ -40,6 +40,15 @@ pipeline {
                   kubectl apply -f k8s/service.yaml
                 '''
             }
+        }
+    }
+
+    post {
+        success {
+            echo "Deployment successful using Podman + RKE2"
+        }
+        failure {
+            echo "Pipeline failed"
         }
     }
 }
