@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "docker.io/greeshma6-7/todo-app"
-        IMAGE_TAG  = "1.0"
-    }
-
     stages {
 
         stage('Checkout Code') {
@@ -14,28 +9,9 @@ pipeline {
             }
         }
 
-        stage('Build Image with Podman') {
+        stage('Deploy to RKE2') {
             steps {
                 sh '''
-                  echo "Building image using PODMAN..."
-                  podman build -t $IMAGE_NAME:$IMAGE_TAG .
-                '''
-            }
-        }
-
-        stage('Push Image with Podman') {
-            steps {
-                sh '''
-                  echo "Pushing image using PODMAN..."
-                  podman push $IMAGE_NAME:$IMAGE_TAG
-                '''
-            }
-        }
-
-        stage('Deploy to RKE2 Kubernetes') {
-            steps {
-                sh '''
-                  echo "Deploying to RKE2..."
                   kubectl apply -f k8s/deployment.yaml
                   kubectl apply -f k8s/service.yaml
                 '''
@@ -45,10 +21,7 @@ pipeline {
 
     post {
         success {
-            echo "Deployment successful using Podman + RKE2"
-        }
-        failure {
-            echo "Pipeline failed"
+            echo "Deployed successfully using Podman-built image"
         }
     }
 }
