@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REGISTRY   = "docker.io"
-        IMAGE_NAME = "greeshma6-7/todo-app"
+        IMAGE_NAME = "greeshma258/todo-app"
         IMAGE_TAG  = "${BUILD_NUMBER}"
     }
 
@@ -31,21 +31,14 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh '''
-                      podman login ${REGISTRY} \
-                        -u ${DOCKER_USER} \
-                        -p ${DOCKER_PASS}
-                    '''
+                    sh 'podman login ${REGISTRY} -u ${DOCKER_USER} -p ${DOCKER_PASS}'
                 }
             }
         }
 
         stage('Push Image') {
             steps {
-                sh '''
-                  echo "Pushing image"
-                  podman push ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
-                '''
+                sh 'podman push ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}'
             }
         }
 
@@ -57,12 +50,6 @@ pipeline {
                   kubectl apply -f k8s/service.yaml
                 '''
             }
-        }
-    }
-
-    post {
-        success {
-            echo "Image built, pushed, and deployed successfully"
         }
     }
 }
