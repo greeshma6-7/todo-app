@@ -13,7 +13,9 @@ spec:
         app: todo
     spec:
       containers:
-      - name: todo
-        image: docker.io/greeshma6-7/todo-app:1.0
-        ports:
-        - containerPort: 5000
+        - name: todo
+          image: docker.io/greeshma258/todo-app:13
+          ports:
+            - containerPort: 5000
+      imagePullSecrets:
+        - name: dockerhub-secret
