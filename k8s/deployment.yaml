@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: todo
-          image: docker.io/greeshma258/todo-app:13
+          image: docker.io/greeshma258/todo-app:IMAGE_TAG
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
       imagePullSecrets:
