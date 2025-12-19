@@ -2,6 +2,7 @@ from flask import Flask, request, redirect, url_for, render_template_string
 import os
 
 app = Flask(__name__)
+
 FILE = "todos.txt"
 
 HTML_PAGE = """
@@ -39,6 +40,8 @@ HTML_PAGE = """
 </html>
 """
 
+# ---------- Helper functions ----------
+
 def load_tasks():
     if not os.path.exists(FILE):
         return []
@@ -49,6 +52,8 @@ def save_tasks(tasks):
     with open(FILE, "w") as f:
         for task in tasks:
             f.write(task + "\n")
+
+# ---------- Routes ----------
 
 @app.route("/")
 def index():
@@ -71,6 +76,20 @@ def delete_task(index):
         tasks.pop(index)
         save_tasks(tasks)
     return redirect(url_for("index"))
+
+# ---------- DEMO ENDPOINT (MANUAL DATE) ----------
+
+@app.route("/demo")
+def demo():
+    manual_date = request.args.get("date", "No date provided")
+    return f"""
+    Hi Waseem<br>
+    Hi Davana<br>
+    Hi Greeshma<br><br>
+    Today's date (manual): {manual_date}
+    """
+
+# ---------- App start ----------
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
