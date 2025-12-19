@@ -4,12 +4,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    manual_date = request.args.get("date", "No date provided")
+    date = request.args.get("date", "No date provided")
     return f"""
     Hi Waseem<br>
-    Hi Davana<br>
-    Hi Greeshma<br><br>
-    Today's date (manual): {manual_date}
+    Hi Greeshma<br>
+    Hi Davana<br><br>
+    Today's date: {date}
     """
 
 if __name__ == "__main__":
